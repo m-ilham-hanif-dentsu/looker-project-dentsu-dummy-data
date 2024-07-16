@@ -19,6 +19,6 @@ include: "/views/*.view.lkml"                # include all views in the views/ f
 #   }
 # }
 
-explore: fact_sales_value {
-  from: fact_sales_value
+explore: claim_history {
+  from: claim_history
 }
