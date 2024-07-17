@@ -1,8 +1,17 @@
 
 view: ref_agent {
   derived_table: {
-    sql: select 1001 agent_id, "christian.hardjono@dentsu.com" agent_email
-      union all select 1002 agent_id, "ghaisani.anindya@dentsu.com" agent_email ;;
+    sql: with
+      src as (
+
+      select 1001 agent_id, "christian.hardjono@dentsu.com" agent_email
+      union all select 1002 agent_id, "ghaisani.anindya@dentsu.com" agent_email
+
+      )
+
+      select * from src
+      where 1=1
+      and agent_email = "{{ _user_attributes['email'] }}" ;;
   }
 
   measure: count {
@@ -23,7 +32,7 @@ view: ref_agent {
   set: detail {
     fields: [
         agent_id,
-	agent_email
+        agent_email
     ]
   }
 }
