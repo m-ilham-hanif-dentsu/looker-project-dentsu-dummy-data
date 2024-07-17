@@ -433,7 +433,7 @@ view: sales_agent {
           from src
       )
       where 1=1
-      and policy_type = "{{ _user_attributes['data__policy_type__available'] }}" ;;
+      and upper(policy_type) like "{{ _user_attributes['data__policy_type__available'] }}" ;;
   }
 
   # Dimension
