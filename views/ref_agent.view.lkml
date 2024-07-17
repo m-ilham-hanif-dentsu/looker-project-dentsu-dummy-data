@@ -4,9 +4,9 @@ view: ref_agent {
     sql: with
       src as (
 
-      select 1001 agent_id, "christian.hardjono@dentsu.com" agent_email
-      union all select 1002 agent_id, "ghaisani.anindya@dentsu.com" agent_email
-      union all select 1003 agent_id, "ilham.hanif@dentsu.com" agent_email
+      select 1001 agent_id, "christian.hardjono@dentsu.com" agent_email, "HEALTH INSURANCE" agent__data__policy_type__available
+      union all select 1002 agent_id, "ghaisani.anindya@dentsu.com" agent_email, "LIFE INSURANCE" agent__data__policy_type__available
+      union all select 1003 agent_id, "ilham.hanif@dentsu.com" agent_email, "%" agent__data__policy_type__available
 
       )
 
