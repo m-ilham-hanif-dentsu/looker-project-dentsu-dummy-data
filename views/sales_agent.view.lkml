@@ -3,7 +3,7 @@ view: sales_agent {
   derived_table: {
     sql: with
       src as (
-      
+
       select split('1001~Maridel Atley~Junior~5ER8Q05AV70~Maridel Rentoll~Maridel~Health Insurance~01/04/2023~01/04/2083~60~720~Rp22,154,576~Annually~21~Rp22,154,576~Rp1,409,900,311~Health~38~Female~Senior Developer~YES', '~') as `row`
       union all select split('1002~Booth Wendover~Junior~1GD3GU6JU42~Booth Michael~Booth~Life Insurance~01/04/2023~01/04/2059~36~432~Rp1,415,441~Monthly~17~Rp16,985,292~Rp692,773,072~Life~28~Male~Editor~NO', '~') as `row`
       union all select split('1003~Chanda Metzing~Executive~1NE4CT0KR99~Chanda Duchan~Chanda~Travel Insurance~01/02/2023~01/02/2055~32~384~654,732~Monthly~14~Rp7,856,784~Rp723,533,210~Travel~55~Female~Computer Systems Analyst I~NO', '~') as `row`
@@ -404,9 +404,9 @@ view: sales_agent {
       union all select split('1018~Agace Skelcher~Senior~6G93KA5EY89~Lucretia Rable~Lucretia~Travel Insurance~01/01/2023~01/01/2024~1~12~Rp2,380,483~Annually~4~Rp2,380,483~Rp823,086,646~Travel~59~Genderfluid~Recruiter~SMOKER', '~') as `row`
       union all select split('1019~Georg Pyrah~Senior~8V58G38UY24~Berk McGeaney~Berk~Home Insurance~01/02/2023~01/02/2069~46~552~653,012~Monthly~4~Rp7,836,144~Rp958,894,534~Home~27~Agender~GIS Technical Architect~SMOKER', '~') as `row`
       union all select split('1020~Gardener Frissell~Senior~3Q67EP8UY57~Ursola Kilmurray~Ursola~Critical Illness Insurance~01/01/2023~01/01/2063~40~480~Rp34,700,750~Annually~5~Rp34,700,750~Rp1,520,199,635~Health~20~Female~Analyst Programmer~MEDICAL', '~') as `row`
-      
+
       )
-      
+
       select
       cast(`row`[safe_ordinal(1)] as int64) as agent_id,
       `row`[safe_ordinal(2)] as agent_nm,
@@ -428,15 +428,11 @@ view: sales_agent {
       cast(`row`[safe_ordinal(18)] as int64) as insured_age,
       `row`[safe_ordinal(19)] as insured_gender,
       `row`[safe_ordinal(20)] as insured_occupation,
-      `row`[safe_ordinal(21)] as insured_pre_existing_gender
+      `row`[safe_ordinal(21)] as insured_pre_existing_condition
       from src ;;
   }
 
-  measure: count {
-    type: count
-    drill_fields: [detail*]
-  }
-
+  # Dimension
   dimension: agent_id {
     type: number
     sql: ${TABLE}.agent_id ;;
@@ -514,6 +510,16 @@ view: sales_agent {
     sql: ${TABLE}.prem_paid_annual_amount ;;
   }
 
+  dimension: prem_earned {
+    type: number
+    sql: ((EXTRACT(YEAR FROM CURRENT_DATE("Asia/Jakarta")) - EXTRACT(YEAR FROM ${TABLE}.police_issued_dt))+1) * ${TABLE}.prem_paid_annual_amount ;;
+  }
+
+  dimension: agent_commision {
+    type: number
+    sql: ${prem_earned} * 0.3 ;;
+  }
+
   dimension: benefit_coverage_amount {
     type: number
     sql: ${TABLE}.benefit_coverage_amount ;;
@@ -529,6 +535,31 @@ view: sales_agent {
     sql: ${TABLE}.insured_age ;;
   }
 
+  dimension: insured_age_group {
+    type: string
+    sql: case
+    when ${TABLE}.insured_age > 60 then "60+"
+    when ${TABLE}.insured_age > 50 and ${TABLE}.insured_age <= 60 then "51 - 60"
+    when ${TABLE}.insured_age > 40 and ${TABLE}.insured_age <= 50 then "41 - 50"
+    when ${TABLE}.insured_age > 30 and ${TABLE}.insured_age <= 40 then "31 - 40"
+    when ${TABLE}.insured_age > 20 and ${TABLE}.insured_age <= 30 then "21 - 30"
+    when ${TABLE}.insured_age > 10 and ${TABLE}.insured_age <= 20 then "11 - 20"
+    end ;;
+    order_by_field: insured_age_group_order_no
+  }
+
+  dimension: insured_age_group_order_no {
+    type: number
+    sql: case
+    when ${TABLE}.insured_age > 60 then 6
+    when ${TABLE}.insured_age > 50 and ${TABLE}.insured_age <= 60 then 5
+    when ${TABLE}.insured_age > 40 and ${TABLE}.insured_age <= 50 then 4
+    when ${TABLE}.insured_age > 30 and ${TABLE}.insured_age <= 40 then 3
+    when ${TABLE}.insured_age > 20 and ${TABLE}.insured_age <= 30 then 2
+    when ${TABLE}.insured_age > 10 and ${TABLE}.insured_age <= 20 then 1
+    end ;;
+  }
+
   dimension: insured_gender {
     type: string
     sql: ${TABLE}.insured_gender ;;
@@ -539,34 +570,69 @@ view: sales_agent {
     sql: ${TABLE}.insured_occupation ;;
   }
 
-  dimension: insured_pre_existing_gender {
+  dimension: insured_occupation_group {
     type: string
-    sql: ${TABLE}.insured_pre_existing_gender ;;
+    sql: case
+    when upper(${TABLE}.insured_occupation) like "%DEVELOPER%"
+      or upper(${TABLE}.insured_occupation) like "%ENGINEERING%"
+      or upper(${TABLE}.insured_occupation) like "%DATABASE%"
+      or upper(${TABLE}.insured_occupation) like "%PROGRAMMER%"
+      or upper(${TABLE}.insured_occupation) like "%AUTOMATION%"
+      or upper(${TABLE}.insured_occupation) like "%TECHNICIAN%"
+    then "Technology and Engineering"
+    when upper(${TABLE}.insured_occupation) like "%BUDGET%"
+      or upper(${TABLE}.insured_occupation) like "%ACCOUNTANT%"
+      or upper(${TABLE}.insured_occupation) like "%FINANCIAL%"
+      or upper(${TABLE}.insured_occupation) like "%ACCOUNTING%"
+      or upper(${TABLE}.insured_occupation) like "%AUDITOR%"
+    then "Finance and Accounting"
+    when upper(${TABLE}.insured_occupation) like "%NURSE%"
+      or upper(${TABLE}.insured_occupation) like "%CLINICAL%"
+      or upper(${TABLE}.insured_occupation) like "%SCIENTIST%"
+      or upper(${TABLE}.insured_occupation) like "%HEALTH%"
+      or upper(${TABLE}.insured_occupation) like "%THERAPIST%"
+      or upper(${TABLE}.insured_occupation) like "%SPEECH PATHOLOGIST%"
+      or upper(${TABLE}.insured_occupation) like "%RESEARCH%"
+    then "Health and Science"
+    else "Others"
+    end ;;
   }
 
+  dimension: insured_pre_existing_condition {
+    type: string
+    sql: ${TABLE}.insured_pre_existing_condition ;;
+  }
+
+  # Measure
+  measure: count {
+    type: count
+    drill_fields: [detail*]
+  }
+
+  # Drill
   set: detail {
     fields: [
         agent_id,
-	agent_nm,
-	agent_level,
-	policy_id,
-	policy_holder_nm,
-	insured_nm,
-	policy_type,
-	police_issued_dt,
-	maturity_dt,
-	coverage_time_year,
-	coverage_time_month,
-	prem_amount_per_period,
-	prem_paid_period,
-	prem_paid_duration_in_annual,
-	prem_paid_annual_amount,
-	benefit_coverage_amount,
-	insured_item,
-	insured_age,
-	insured_gender,
-	insured_occupation,
-	insured_pre_existing_gender
+        agent_nm,
+        agent_level,
+        policy_id,
+        policy_holder_nm,
+        insured_nm,
+        policy_type,
+        police_issued_dt,
+        maturity_dt,
+        coverage_time_year,
+        coverage_time_month,
+        prem_amount_per_period,
+        prem_paid_period,
+        prem_paid_duration_in_annual,
+        prem_paid_annual_amount,
+        benefit_coverage_amount,
+        insured_item,
+        insured_age,
+        insured_gender,
+        insured_occupation,
+        insured_pre_existing_condition
     ]
   }
 }

@@ -44,6 +44,7 @@ test: datatype__agent_email {
       field: ref_agent.agent_email
     }
   }
+
   assert:  datatype__agent_email__have_email_sign {
     expression: contains(${ref_agent.agent_email}, "@")
                 OR is_null(${ref_agent.agent_email})
