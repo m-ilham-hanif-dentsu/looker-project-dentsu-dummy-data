@@ -407,29 +407,33 @@ view: sales_agent {
 
       )
 
-      select
-      cast(`row`[safe_ordinal(1)] as int64) as agent_id,
-      `row`[safe_ordinal(2)] as agent_nm,
-      `row`[safe_ordinal(3)] as agent_level,
-      `row`[safe_ordinal(4)] as policy_id,
-      `row`[safe_ordinal(5)] as policy_holder_nm,
-      `row`[safe_ordinal(6)] as insured_nm,
-      `row`[safe_ordinal(7)] as policy_type,
-      parse_date("%d/%m/%Y", `row`[safe_ordinal(8)]) as police_issued_dt,
-      parse_date("%d/%m/%Y", `row`[safe_ordinal(9)]) as maturity_dt,
-      cast(`row`[safe_ordinal(10)] as int64) as coverage_time_year,
-      cast(`row`[safe_ordinal(11)] as int64) as coverage_time_month,
-      cast(nullif(replace(replace(`row`[safe_ordinal(12)], "Rp", ""), ",", ""), " ") as float64) as prem_amount_per_period,
-      `row`[safe_ordinal(13)] as prem_paid_period,
-      cast(`row`[safe_ordinal(14)] as int64) as prem_paid_duration_in_annual,
-      cast(nullif(replace(replace(`row`[safe_ordinal(15)], "Rp", ""), ",", ""), " ") as float64) as prem_paid_annual_amount,
-      cast(nullif(replace(replace(`row`[safe_ordinal(16)], "Rp", ""), ",", ""), " ") as float64) as benefit_coverage_amount,
-      `row`[safe_ordinal(17)] as insured_item,
-      cast(`row`[safe_ordinal(18)] as int64) as insured_age,
-      `row`[safe_ordinal(19)] as insured_gender,
-      `row`[safe_ordinal(20)] as insured_occupation,
-      `row`[safe_ordinal(21)] as insured_pre_existing_condition
-      from src ;;
+      select * from (
+          select
+          cast(`row`[safe_ordinal(1)] as int64) as agent_id,
+          `row`[safe_ordinal(2)] as agent_nm,
+          `row`[safe_ordinal(3)] as agent_level,
+          `row`[safe_ordinal(4)] as policy_id,
+          `row`[safe_ordinal(5)] as policy_holder_nm,
+          `row`[safe_ordinal(6)] as insured_nm,
+          `row`[safe_ordinal(7)] as policy_type,
+          parse_date("%d/%m/%Y", `row`[safe_ordinal(8)]) as police_issued_dt,
+          parse_date("%d/%m/%Y", `row`[safe_ordinal(9)]) as maturity_dt,
+          cast(`row`[safe_ordinal(10)] as int64) as coverage_time_year,
+          cast(`row`[safe_ordinal(11)] as int64) as coverage_time_month,
+          cast(nullif(replace(replace(`row`[safe_ordinal(12)], "Rp", ""), ",", ""), " ") as float64) as prem_amount_per_period,
+          `row`[safe_ordinal(13)] as prem_paid_period,
+          cast(`row`[safe_ordinal(14)] as int64) as prem_paid_duration_in_annual,
+          cast(nullif(replace(replace(`row`[safe_ordinal(15)], "Rp", ""), ",", ""), " ") as float64) as prem_paid_annual_amount,
+          cast(nullif(replace(replace(`row`[safe_ordinal(16)], "Rp", ""), ",", ""), " ") as float64) as benefit_coverage_amount,
+          `row`[safe_ordinal(17)] as insured_item,
+          cast(`row`[safe_ordinal(18)] as int64) as insured_age,
+          `row`[safe_ordinal(19)] as insured_gender,
+          `row`[safe_ordinal(20)] as insured_occupation,
+          `row`[safe_ordinal(21)] as insured_pre_existing_condition
+          from src
+      )
+      where 1=1
+      and policy_type = "{{ _user_attributes['data__policy_type__available'] }}" ;;
   }
 
   # Dimension
