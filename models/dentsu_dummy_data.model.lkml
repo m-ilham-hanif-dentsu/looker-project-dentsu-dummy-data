@@ -22,3 +22,11 @@ include: "/views/*.view.lkml"                # include all views in the views/ f
 explore: claim_history {
   from: claim_history
 }
+
+explore: sales_agent {
+  from: sales_agent
+}
+
+explore: ref_agent {
+  from: ref_agent
+}
