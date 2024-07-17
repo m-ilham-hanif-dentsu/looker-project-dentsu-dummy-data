@@ -6,6 +6,7 @@ view: ref_agent {
 
       select 1001 agent_id, "christian.hardjono@dentsu.com" agent_email
       union all select 1002 agent_id, "ghaisani.anindya@dentsu.com" agent_email
+      union all select 1003 agent_id, "ilham.hanif@dentsu.com" agent_email
 
       )
 
@@ -34,5 +35,18 @@ view: ref_agent {
         agent_id,
         agent_email
     ]
+  }
+}
+
+test: datatype__agent_email {
+  explore_source: ref_agent {
+    column: agent_email {
+      field: ref_agent.agent_email
+    }
+  }
+  assert:  datatype__agent_email__have_email_sign {
+    expression: contains(${ref_agent.agent_email}, "@")
+                OR is_null(${ref_agent.agent_email})
+    ;;
   }
 }
