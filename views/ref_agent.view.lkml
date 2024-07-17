@@ -6,6 +6,7 @@ view: ref_agent {
 
       select 1001 agent_id, "christian.hardjono@dentsu.com" agent_email
       union all select 1002 agent_id, "ghaisani.anindya@dentsu.com" agent_email
+      union all select 1003 agent_id, "ilham.hanif@dentsu.com" agent_email
 
       )
 
