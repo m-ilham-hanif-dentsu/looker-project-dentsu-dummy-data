@@ -25,6 +25,7 @@ explore: claim_history {
 
 explore: sales_agent {
   from: sales_agent
+  sql_always_where: ${sales_agent.policy_type} like "{{ _user_attributes['data__policy_type__available'] }}";;
 }
 
 explore: ref_agent {

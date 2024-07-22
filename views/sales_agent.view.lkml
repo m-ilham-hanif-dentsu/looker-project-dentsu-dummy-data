@@ -10,7 +10,7 @@ view: sales_agent {
       union all select split('1004~Dela Dayce~Senior~6NE7CD1QU85~Dela Bensley~Dela~Home Insurance~01/02/2023~01/02/2038~15~180~Rp9,213,562~Annually~16~Rp9,213,562~Rp1,419,067,422~Home~20~Female~Design Engineer~YES', '~') as `row`
       union all select split('1005~Marietta Gravenall~Junior~2YJ7XQ3UP02~Marietta Jedrzejczyk~Marietta~Critical Illness Insurance~01/03/2023~01/03/2062~39~468~Rp35,646,258~Annually~13~Rp35,646,258~Rp1,404,509,242~Health~28~Male~Financial Analyst~YES', '~') as `row`
       union all select split('1006~Mirella Kingsnoad~Junior~2R19W52VR87~Mirella Schinetti~Mirella~Health Insurance~01/03/2023~01/03/2034~11~132~Rp2,473,774~Monthly~15~Rp29,685,288~Rp1,586,161,061~Health~37~Female~Food Chemist~YES', '~') as `row`
-      union all select split('1007~Goldie Meth~Junior~5X27G91HV95~Goldie Leadbitter~Goldie~Life Insurance~02/03/2023~02/03/2043~20~240~Rp2,324,640~Monthly~2~Rp27,895,680~Rp1,686,206,260~Life~31~Female~Social Worker~YES', '~') as `row`
+      union all select split('1007~Goldie Meth~Junior~5X27G91HV95~Goldie Leadbitter~Goldie~Life Insurance~01/03/2023~01/03/2043~20~240~Rp2,324,640~Monthly~2~Rp27,895,680~Rp1,686,206,260~Life~31~Female~Social Worker~YES', '~') as `row`
       union all select split('1008~Susy Eliesco~Executive~9QN2NQ0EY26~Susy Minster~Susy~Travel Insurance~01/02/2023~01/02/2039~16~192~Rp1,246,405~Annually~23~Rp1,246,405~Rp588,907,062~Travel~15~Female~Operator~NO', '~') as `row`
       union all select split('1009~Cassius Romushkin~Junior~9CX3M75FR65~Cassius Swaine~Cassius~Home Insurance~01/02/2023~01/02/2059~36~432~906,811~Monthly~17~Rp10,881,732~Rp1,383,124,943~Home~62~Male~Financial Analyst~SMOKER', '~') as `row`
       union all select split('1010~Land Nassau~Senior~2DY2HP3KQ38~Land Warner~Land~Critical Illness Insurance~01/02/2023~01/02/2063~40~480~Rp1,791,155~Monthly~6~Rp21,493,860~Rp1,617,814,638~Health~20~Male~GIS Technical Architect~MEDICAL', '~') as `row`
@@ -431,9 +431,7 @@ view: sales_agent {
           `row`[safe_ordinal(20)] as insured_occupation,
           `row`[safe_ordinal(21)] as insured_pre_existing_condition
           from src
-      )
-      where 1=1
-      and upper(policy_type) like "{{ _user_attributes['data__policy_type__available'] }}" ;;
+      );;
   }
 
   # Dimension
