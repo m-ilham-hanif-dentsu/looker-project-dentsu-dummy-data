@@ -38,14 +38,14 @@ view: ref_agent {
   }
 }
 
-test: datatype__agent_email {
+test: ref_agent__datatype__agent_email {
   explore_source: ref_agent {
     column: agent_email {
       field: ref_agent.agent_email
     }
   }
 
-  assert:  datatype__agent_email__have_email_sign {
+  assert: ref_agent__datatype__agent_email__have_email_sign {
     expression: contains(${ref_agent.agent_email}, "@")
                 OR is_null(${ref_agent.agent_email})
     ;;
