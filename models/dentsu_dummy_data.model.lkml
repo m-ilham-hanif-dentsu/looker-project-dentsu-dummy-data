@@ -16,27 +16,22 @@ explore: ref_agent {
   hidden: yes
 }
 
-explore: ref_agent_v2 {
-  from: ref_agent_v2
-  hidden: yes
-}
-
 explore: claim_history_v2 {
   from: claim_history
-  join: ref_agent_v2 {
-    sql_on: ${claim_history_v2.agent_id} = ${ref_agent_v2.agent_id} ;;
+  join: ref_agent {
+    sql_on: ${claim_history_v2.agent_id} = ${ref_agent.agent_id} ;;
     relationship: many_to_one
-    sql_where: ${ref_agent_v2.agent_email} = "{{ _user_attributes['email'] }}";;
+    sql_where: ${ref_agent.agent_email} = "{{ _user_attributes['email'] }}";;
   }
-  always_join: [ref_agent_v2]
+  always_join: [ref_agent]
 }
 
 explore: sales_agent_v2 {
   from: sales_agent
-  join: ref_agent_v2 {
-    sql_on: ${sales_agent_v2.agent_id} = ${ref_agent_v2.agent_id} ;;
+  join: ref_agent {
+    sql_on: ${sales_agent_v2.agent_id} = ${ref_agent.agent_id} ;;
     relationship: many_to_one
-    sql_where: ${ref_agent_v2.agent_email} = "{{ _user_attributes['email'] }}";;
+    sql_where: ${ref_agent.agent_email} = "{{ _user_attributes['email'] }}";;
   }
-  always_join: [ref_agent_v2]
+  always_join: [ref_agent]
 }
