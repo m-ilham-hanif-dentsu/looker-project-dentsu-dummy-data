@@ -70,16 +70,16 @@ view: ref_agent {
   }
 }
 
-test: ref_agent_v2__datatype__agent_email {
-  explore_source: ref_agent_v2 {
+test: ref_agent__datatype__agent_email {
+  explore_source: ref_agent {
     column: agent_email {
-      field: ref_agent_v2.agent_email
+      field: ref_agent.agent_email
     }
   }
 
-  assert: ref_agent_v2__datatype__agent_email__have_email_sign {
-    expression: contains(${ref_agent_v2.agent_email}, "@")
-                OR is_null(${ref_agent_v2.agent_email})
+  assert: ref_agent__datatype__agent_email__have_email_sign {
+    expression: contains(${ref_agent.agent_email}, "@")
+                OR is_null(${ref_agent.agent_email})
     ;;
   }
 }
