@@ -611,24 +611,6 @@ view: sales_agent {
     drill_fields: [detail*]
   }
 
-  measure: cntd_policy_id {
-    type: count_distinct
-    sql: ${TABLE}.policy_id ;;
-    drill_fields: [detail*]
-  }
-
-  measure: sum_agent_commision {
-    type: sum
-    sql: ${agent_commision} ;;
-    drill_fields: [detail*]
-  }
-
-  measure: average_commision {
-    type: number
-    sql: ${sum_agent_commision}/${cntd_policy_id} ;;
-    drill_fields: [detail*]
-  }
-
   # Drill
   set: detail {
     fields: [
