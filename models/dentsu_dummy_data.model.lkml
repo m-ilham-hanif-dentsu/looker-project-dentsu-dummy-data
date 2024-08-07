@@ -10,7 +10,7 @@ explore: sales_agent {
   from: sales_agent
   access_filter: {
     field: sales_agent.policy_type
-    user_attribute: data__policy_type__available
+    user_attribute: allowed__policy_type
   }
 }
 
@@ -18,7 +18,7 @@ explore: sales_agent__agent_performance_overall {
   from: sales_agent__agent_performance_overall
   access_filter: {
     field: sales_agent__agent_performance_overall.policy_type
-    user_attribute: data__policy_type__available
+    user_attribute: allowed__policy_type
   }
 }
 
