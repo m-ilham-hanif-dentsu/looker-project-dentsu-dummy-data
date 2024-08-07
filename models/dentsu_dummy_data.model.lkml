@@ -8,12 +8,18 @@ explore: claim_history {
 
 explore: sales_agent {
   from: sales_agent
-  sql_always_where: upper(${sales_agent.policy_type}) like "{{ _user_attributes['data__policy_type__available'] }}";;
+  access_filter: {
+    field: sales_agent.policy_type
+    user_attribute: data__policy_type__available
+  }
 }
 
 explore: sales_agent__agent_performance_overall {
   from: sales_agent__agent_performance_overall
-  sql_always_where: upper(${sales_agent__agent_performance_overall.policy_type}) like "{{ _user_attributes['data__policy_type__available'] }}";;
+  access_filter: {
+    field: sales_agent__agent_performance_overall.policy_type
+    user_attribute: data__policy_type__available
+  }
 }
 
 explore: ref_agent {
