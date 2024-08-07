@@ -32,9 +32,11 @@ explore: claim_history_v2 {
   join: ref_agent {
     sql_on: ${claim_history_v2.agent_id} = ${ref_agent.agent_id} ;;
     relationship: many_to_one
-    sql_where: ${ref_agent.agent_email} = "{{ _user_attributes['email'] }}";;
   }
-  always_join: [ref_agent]
+  access_filter: {
+    field: ref_agent.agent_email
+    user_attribute: email
+  }
 }
 
 explore: sales_agent_v2 {
@@ -42,7 +44,9 @@ explore: sales_agent_v2 {
   join: ref_agent {
     sql_on: ${sales_agent_v2.agent_id} = ${ref_agent.agent_id} ;;
     relationship: many_to_one
-    sql_where: ${ref_agent.agent_email} = "{{ _user_attributes['email'] }}";;
   }
-  always_join: [ref_agent]
+  access_filter: {
+    field: ref_agent.agent_email
+    user_attribute: email
+  }
 }
