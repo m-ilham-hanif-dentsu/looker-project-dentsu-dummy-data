@@ -4,7 +4,7 @@ view: ref_agent {
     sql: with
       src as (
 
-      select split('1001~Maridel Atley~Junior~ruli.wicaksono@sequislife.com', '~') as `row`
+      select split('1001~Maridel Atley~Junior~ruli.wicaksono@sequislife.com~merkleid.sequis@dentsu.com', '~') as `row`
       union all select split('1002~Booth Wendover~Junior', '~') as `row`
       union all select split('1003~Chanda Metzing~Executive', '~') as `row`
       union all select split('1004~Dela Dayce~Senior', '~') as `row`
