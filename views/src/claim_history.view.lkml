@@ -37,11 +37,7 @@ view: claim_history {
       from src ;;
   }
 
-  measure: count {
-    type: count
-    drill_fields: [detail*]
-  }
-
+  # Dimension
   dimension: claim_id {
     type: number
     sql: ${TABLE}.claim_id ;;
@@ -98,6 +94,13 @@ view: claim_history {
     sql: ${TABLE}.claim_status ;;
   }
 
+  # Measure
+  measure: count {
+    type: count
+    drill_fields: [detail*]
+  }
+
+  # Drill
   set: detail {
     fields: [
         claim_id,

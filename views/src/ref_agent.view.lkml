@@ -35,11 +35,7 @@ view: ref_agent {
       from src ;;
   }
 
-  measure: count {
-    type: count
-    drill_fields: [detail*]
-  }
-
+  # Dimension
   dimension: agent_id {
     type: number
     sql: ${TABLE}.agent_id ;;
@@ -60,6 +56,13 @@ view: ref_agent {
     sql: ${TABLE}.agent_email ;;
   }
 
+  # Measure
+  measure: count {
+    type: count
+    drill_fields: [detail*]
+  }
+
+  # Drill
   set: detail {
     fields: [
       agent_id,
